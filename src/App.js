@@ -107,9 +107,6 @@ class App extends Component {
     }
 
     onFilter = (filterName, filterStatus) => {
-        console.log(filterName, '-', filterStatus)
-        console.log(typeof filterName);
-        console.log(typeof filterStatus);
         this.setState({
             filterName : filterName,
             filterStatus : filterStatus
