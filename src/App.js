@@ -107,6 +107,9 @@ class App extends Component {
     }
 
     onFilter = (filterName, filterStatus) => {
+        console.log(filterName, '-', filterStatus)
+        console.log(typeof filterName);
+        console.log(typeof filterStatus);
         this.setState({
             filterName : filterName,
             filterStatus : filterStatus
@@ -132,7 +135,7 @@ class App extends Component {
         }
         if(filterStatus){
             tasks = filter(tasks, (task) => {
-                if(filterStatus === '-1'){
+                if(filterStatus === '-1' || filterStatus === -1){
                     return task;
                 }else{
                     return task.status === (parseInt(filterStatus, 10) === 1 ? true : false);
