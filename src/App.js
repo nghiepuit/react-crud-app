@@ -91,6 +91,7 @@ class App extends Component {
             tasks : tasks
         });
         localStorage.setItem('tasks', JSON.stringify(tasks));
+        this.onExitForm();
     }
 
     onSearch = (keyword) => {
