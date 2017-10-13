@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from './../actions/index';
 
 class TaskForm extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            id : '',
+            name : '',
+            status : false
+        };
     }
 
     componentWillMount() {
@@ -15,7 +21,7 @@ class TaskForm extends Component {
                 status : this.props.itemEditing.status
             });
         }else{
-            this.resetState();
+            this.onClear();
         }
     }
 
@@ -27,7 +33,7 @@ class TaskForm extends Component {
                 status : nextProps.itemEditing.status
             });
         }else{
-            this.resetState();
+            this.onClear();
         }
     }
 
@@ -40,26 +46,26 @@ class TaskForm extends Component {
         });
     }
 
-    onHandleSubmit = (event) => {
+    onSave = (event) => {
         event.preventDefault();
-        this.props.onSave(this.state);
-        this.resetState();
+        this.props.onSaveTask(this.state);
+        this.onClear();
         this.onExitForm();
     }
 
-    resetState = () => {
+    onClear = () => {
         this.setState({
-            id : '',
             name : '',
             status : false
         });
     }
 
     onExitForm = () => {
-        this.props.onExitForm();
+        this.props.onCloseForm();
     }
 
     render() {
+        if(!this.props.isDisplayForm) return null;
         return (
             <div className="panel panel-warning">
                 <div className="panel-heading">
@@ -72,7 +78,7 @@ class TaskForm extends Component {
                     </h3>
                 </div>
                 <div className="panel-body">
-                    <form onSubmit={this.onHandleSubmit} >
+                    <form onSubmit={this.onSave} >
                         <div className="form-group">
                             <label>Tên :</label>
                             <input
@@ -97,7 +103,7 @@ class TaskForm extends Component {
                             <button type="submit" className="btn btn-warning">
                                 <span className="fa fa-plus mr-5"></span>Lưu Lại
                             </button>&nbsp;
-                            <button type="button" onClick={ this.resetState } className="btn btn-danger">
+                            <button type="button" onClick={ this.onClear } className="btn btn-danger">
                                 <span className="fa fa-close mr-5"></span>Hủy Bỏ
                             </button>
                         </div>
@@ -108,4 +114,22 @@ class TaskForm extends Component {
     }
 }
 
-export default TaskForm;
+const mapStateToProps = state => {
+    return {
+        isDisplayForm : state.isDisplayForm,
+        itemEditing : state.itemEditing
+    }
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        onSaveTask : (task) => {
+            dispatch(actions.saveTask(task));
+        },
+        onCloseForm : () => {
+            dispatch(actions.closeForm());
+        }
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(TaskForm);
